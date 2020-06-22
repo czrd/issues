@@ -9,12 +9,33 @@ defmodule Issues.TableFormatter do
     end
   end
 
+  @doc """
+  Given a list of rows, where each row contains a keyed list
+  of columns, return a list containing lists of the data in
+  each column. The `headers` parameter contains the list of
+  columns to extract.
+
+  iex> list = [
+  ...>    %{"a" => "a1", "b" => "b1", "c" => "c1"},
+  ...>    %{"a" => "a2", "b" => "b2", "c" => "c2"},
+  ...>  ]
+  iex> Issues.TableFormatter.split_into_columns(list, ["a", "c"])
+  [["a1", "a2"], ["c1", "c2"]]
+  """
   def split_into_columns(rows, headers) do
     for header <- headers do
       for row <- rows, do: printable(row[header])
     end
   end
 
+  @doc """
+  Return a binary (string) version of our parameter.
+  ## Examples
+  iex> Issues.TableFormatter.printable("a")
+  "a"
+  iex> Issues.TableFormatter.printable(99)
+  "99"
+  """
   def printable(str) when is_binary(str), do: str
   def printable(str), do: to_string(str)
 
